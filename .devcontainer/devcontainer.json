@@ -1,8 +1,18 @@
 // For format details, see https://aka.ms/vscode-remote/devcontainer.json or this file's README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.117.1/containers/ruby-2
 {
-	"name": "Investigative Debugging Workshop Container,
+	"name": "Investigative Debugging Workshop Container",
 	"dockerFile": "../Dockerfile",
+	// ************************************************************************
+	// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
+	// 
+	//   This configures the container to run in PRIVILEGED aka ROOT aka ADMIN 
+	//   aka CAN BREAK YOUR SHIT OUTSIDE THE CONTAINER mode.
+	//
+	// ************************************************************************
+	"runArgs": [
+		"--privileged"
+	],
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
 		"terminal.integrated.shell.linux": "/bin/bash"
