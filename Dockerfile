@@ -47,14 +47,37 @@ RUN apt-get update \
     && apt-get install -y sudo \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\
     && chmod 0440 /etc/sudoers.d/$USERNAME
-    #
-    # # Clean up
-    # && apt-get autoremove -y \
-    # && apt-get clean -y \
-    # && rm -rf /var/lib/apt/lists/*
+#
+# # Clean up
+# && apt-get autoremove -y \
+# && apt-get clean -y \
+# && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get install -y man
 
 # Investigative Debugging Tools!
-RUN apt-get install -y strace ltrace
+RUN apt-get install -y strace
+RUN apt-get install -y ltrace
+RUN apt-get install -y linux-perf
+RUN apt-get install -y perf-tools-unstable
+RUN apt-get install -y bpfcc-tools
+RUN apt-get install -y bpftrace
+# needed to compile ruby with --enable-dtrace
+RUN apt-get install -y systemtap-sdt-dev
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
+
+RUN cd ~ \
+    && wget -O ruby-install-0.7.0.tar.gz https://github.com/postmodern/ruby-install/archive/v0.7.0.tar.gz \
+    && tar -xzvf ruby-install-0.7.0.tar.gz \
+    && cd ruby-install-0.7.0/ \
+    && sudo make install
+
+RUN cd ~ \ 
+    && wget -O chruby-0.3.9.tar.gz https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz \
+    && tar -xzvf chruby-0.3.9.tar.gz \
+    && cd chruby-0.3.9/ \
+    && sudo make install
+
+RUN ruby-install && ruby-install ruby-2.7.1 -- --enable-dtrace
