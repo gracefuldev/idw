@@ -1,9 +1,4 @@
-#-------------------------------------------------------------------------------------------------------------
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See https://go.microsoft.com/fwlink/?linkid=2090316 for license information.
-#-------------------------------------------------------------------------------------------------------------
-
-FROM ruby:2
+FROM debian:buster
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
@@ -24,10 +19,6 @@ RUN apt-get update \
     && apt-get -y install --no-install-recommends apt-utils dialog 2>&1 \
     # Verify git, process tools installed
     && apt-get -y install git openssh-client less iproute2 procps lsb-release \
-    #
-    # Install ruby-debug-ide and debase
-    && gem install ruby-debug-ide \
-    && gem install debase \
     #
     # Install Docker CE CLI
     && apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common lsb-release \
@@ -64,6 +55,8 @@ RUN apt-get install -y bpfcc-tools
 RUN apt-get install -y bpftrace
 # needed to compile ruby with --enable-dtrace
 RUN apt-get install -y systemtap-sdt-dev
+RUN apt-get install -y wget
+RUN apt-get install -y build-essential
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
