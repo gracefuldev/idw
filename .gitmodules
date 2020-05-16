@@ -1,3 +1,6 @@
 [submodule "vendor/perf-tools"]
 	path = vendor/perf-tools
 	url = https://github.com/brendangregg/perf-tools.git
+[submodule "vendor/bpftrace"]
+	path = vendor/bpftrace
+	url = https://github.com/iovisor/bpftrace.git

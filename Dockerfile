@@ -53,7 +53,9 @@ RUN apt-get install -y linux-perf
 RUN apt-get install -y perf-tools-unstable
 RUN apt-get install -y bpfcc-tools
 RUN apt-get install -y bpftrace
-# needed to compile ruby with --enable-dtrace
+RUN apt-get install -y lsof
+
+# Prerequisites to builld Ruby with dtrace/usdt enabled
 RUN apt-get install -y systemtap-sdt-dev
 RUN apt-get install -y wget
 RUN apt-get install -y build-essential
@@ -73,4 +75,7 @@ RUN cd ~ \
     && cd chruby-0.3.9/ \
     && sudo make install
 
-RUN ruby-install && ruby-install ruby-2.7.1 -- --enable-dtrace
+ARG RUBY_VERSION=2.7.1
+RUN ruby-install && ruby-install ruby-${RUBY_VERSION} -- --enable-dtrace
+RUN /opt/rubies/ruby-${RUBY_VERSION}/bin/gem install rufo 
+RUN /opt/rubies/ruby-${RUBY_VERSION}/bin/gem install solargraph
