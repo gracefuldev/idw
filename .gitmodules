@@ -4,3 +4,6 @@
 [submodule "vendor/bpftrace"]
 	path = vendor/bpftrace
 	url = https://github.com/iovisor/bpftrace.git
+[submodule "vendor/bcc"]
+	path = vendor/bcc
+	url = https://github.com/iovisor/bcc.git
