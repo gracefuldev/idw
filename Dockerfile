@@ -1,7 +1,4 @@
-# Select a Debian version for:
-# - Recent (0.10) packaged version of bpftrace
-# - Ruby >=2.6 for dtrace support
-FROM debian:bullseye
+FROM debian:buster
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
@@ -9,8 +6,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Docker Compose version
 ARG COMPOSE_VERSION=1.24.0
 ARG RUBY_VERSION=2.7.1
-# Instead of $(lsb_release -cs) because bullseye is too new...
-ARG DOCKER_DEBIAN_RELEASE=buster
 
 # This Dockerfile adds a non-root user with sudo access. Use the "remoteUser"
 # property in devcontainer.json to use it. On Linux, the container user's GID/UIDs
@@ -35,21 +30,19 @@ RUN apt-get update \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
 # Install Docker CE CLI
-# RUN apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common lsb-release \
-#     && curl -fsSL https://download.docker.com/linux/$(lsb_release -is | tr '[:upper:]' '[:lower:]')/gpg | (OUT=$(apt-key add - 2>&1) || echo $OUT) \
-#     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/$(lsb_release -is | tr '[:upper:]' '[:lower:]') $(DOCKER_DEBIAN_RELEASE) stable" \
-#     && apt-get update \
-#     && apt-get install -y docker-ce-cli \
-#     #
-#     # Install Docker Compose
-#     && curl -sSL "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
-#     && chmod +x /usr/local/bin/docker-compose \
-
-
+RUN apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common lsb-release \
+    && curl -fsSL https://download.docker.com/linux/$(lsb_release -is | tr '[:upper:]' '[:lower:]')/gpg | (OUT=$(apt-key add - 2>&1) || echo $OUT) \
+    && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/$(lsb_release -is | tr '[:upper:]' '[:lower:]') $(lsb_release -cs) stable" \
+    && apt-get update \
+    && apt-get install -y docker-ce-cli \
+    #
+    # Install Docker Compose
+    && curl -sSL "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
+    && chmod +x /usr/local/bin/docker-compose
 
 #
 # # Clean up
-# && apt-get autoremove -y \
+# RUN apt-get autoremove -y \
 # && apt-get clean -y \
 # && rm -rf /var/lib/apt/lists/*
 
@@ -67,34 +60,33 @@ RUN apt-get install -y ltrace
 RUN apt-get install -y linux-perf
 RUN apt-get install -y perf-tools-unstable
 RUN apt-get install -y bpfcc-tools
-RUN apt-get install -y bpftrace
+# We're gonna build this one from source
+# RUN apt-get install -y bpftrace
 RUN apt-get install -y lsof
 
-RUN apt-get install -y ruby-full
-
 # Prerequisites to builld Ruby with dtrace/usdt enabled
-# RUN apt-get install -y systemtap-sdt-dev
-# RUN apt-get install -y wget
-# RUN apt-get install -y build-essential
+RUN apt-get install -y systemtap-sdt-dev
+RUN apt-get install -y wget
+RUN apt-get install -y build-essential
 
 
-# RUN cd ~ \
-#     && wget -O ruby-install-0.7.0.tar.gz https://github.com/postmodern/ruby-install/archive/v0.7.0.tar.gz \
-#     && tar -xzvf ruby-install-0.7.0.tar.gz \
-#     && cd ruby-install-0.7.0/ \
-#     && sudo make install
+RUN cd ~ \
+    && wget -O ruby-install-0.7.0.tar.gz https://github.com/postmodern/ruby-install/archive/v0.7.0.tar.gz \
+    && tar -xzvf ruby-install-0.7.0.tar.gz \
+    && cd ruby-install-0.7.0/ \
+    && sudo make install
 
-# RUN cd ~ \ 
-#     && wget -O chruby-0.3.9.tar.gz https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz \
-#     && tar -xzvf chruby-0.3.9.tar.gz \
-#     && cd chruby-0.3.9/ \
-#     && sudo make install
+RUN cd ~ \ 
+    && wget -O chruby-0.3.9.tar.gz https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz \
+    && tar -xzvf chruby-0.3.9.tar.gz \
+    && cd chruby-0.3.9/ \
+    && sudo make install
 
-# RUN ruby-install && ruby-install ruby-${RUBY_VERSION} -- --enable-dtrace
+RUN ruby-install && ruby-install ruby-${RUBY_VERSION} -- --enable-dtrace
 
 # Just some conveniences for editing Ruby files
-RUN gem install rufo 
-RUN gem install solargraph
+RUN /opt/rubies/ruby-${RUBY_VERSION}/bin/gem install rufo 
+RUN /opt/rubies/ruby-${RUBY_VERSION}/bin/gem install solargraph
 
 # Deps for building bpftrace from source
 RUN apt-get install -y libbpfcc-dev
@@ -104,6 +96,14 @@ RUN apt-get install -y libclang-dev
 RUN apt-get install -y cmake
 RUN apt-get install -y binutils-dev
 RUN apt-get install -y clang
+
+RUN cd ~ \
+    && git clone https://github.com/iovisor/bpftrace.git \
+    && mkdir -p bpftrace/build \
+    && cd bpftrace/build \
+    && cmake -DCMAKE_BUILD_TYPE=Release ../ \
+    && make \
+    && make install
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
