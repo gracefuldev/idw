@@ -11,3 +11,10 @@
 6. Reopen VSCode inside the Docker container: Cmd-Shift-P and search for `Remote-Containers: Reopen inside container`
 7. Go make a pot of coffee, because if all goes well the container build will take a while!
 8. If the build breaks for some reason, let me know!
+
+## Update container
+
+To update the container after a Dockerfile update:
+
+1. `Cmd-Shift-P`
+2. Pick `Remote-Containers: Rebuild container`
