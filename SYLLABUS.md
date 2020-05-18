@@ -20,8 +20,10 @@
   - If the program isn’t on your machine, either find a way to run it on a machine you own, or to elevate your privileges.
 - **Stop guessing, start investigating!**
 - Tools like `strace`, `dtrace`, etc. aren’t just for kernel developers and datacenter operators. They are for you, and they can give you superpowers.
-- Start broader than you think you need to, and use *what is actually there* to guide how you narrow your focus. Don’t get clever with your queries!
+- Start broader than you think you need to, and use *what is actually there* to guide how you narrow your focus. **Don’t be clever with your initial queries**!
 - Tracing isn’t just for debugging, it doesn’t always require modifying (or even stopping) a program, and it doesn’t always slow the program down.
+- **Stop guessing, start investigating!**
+- Some of these techniques have a *significant* ramp-up. Both in terms of learning, and of making them work in your environment. If you can knock down that initial friction, they move from the realm of the “theoretically possible” to the realm of the practical.
 
 ## The Concepts
 
