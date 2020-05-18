@@ -105,5 +105,9 @@ RUN cd ~ \
     && make \
     && make install
 
+# For mitmproxy demo
+RUN apt-get install -y mitmproxy
+RUN opt/rubies/ruby-${RUBY_VERSION}/bin/gem install selenium-webdriver
+
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
