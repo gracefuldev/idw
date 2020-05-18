@@ -109,5 +109,18 @@ RUN cd ~ \
 RUN apt-get install -y mitmproxy
 RUN opt/rubies/ruby-${RUBY_VERSION}/bin/gem install selenium-webdriver
 
+# Compile BPF Compiler Collection (BCC) from source. 
+# The version in Debian buster is old enough that it's missing tools such as uflow
+RUN apt-add-repository non-free \
+    && apt-add-repository --enable-source "deb http://httpredir.debian.org/debian/ buster main non-free" \
+    && apt-get update \
+    && cd ~ \
+    && git clone https://github.com/iovisor/bcc.git \
+    && mkdir -p bcc/build \
+    && cd bcc/build \
+    && cmake .. \
+    && make \
+    && make install
+
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
