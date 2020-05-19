@@ -144,7 +144,7 @@ RUN cd ~ \
     && openssl x509 -in /root/.mitmproxy/mitmproxy-ca-cert.pem -inform PEM -out mitmproxy-ca-cert.crt \
     && mkdir /usr/share/ca-certificates/mitmproxy \
     && cp mitmproxy-ca-cert.crt /usr/share/ca-certificates/mitmproxy \
-    && echo "mitmproxy/mitmproxy-ca-cert.crt" >> /etc/ca-certificates.conf
+    && echo "mitmproxy/mitmproxy-ca-cert.crt" >> /etc/ca-certificates.conf \
     && update-ca-certificates
 
 # Switch back to dialog for any ad-hoc use of apt-get
