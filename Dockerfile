@@ -147,5 +147,8 @@ RUN cd ~ \
     && echo "mitmproxy/mitmproxy-ca-cert.crt" >> /etc/ca-certificates.conf \
     && update-ca-certificates
 
+# for dig
+RUN apt install -y dnsutils
+
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
