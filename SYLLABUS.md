@@ -5,6 +5,8 @@
 - I'm not an expert in this stuff. I just know about some useful tools. Let's   explore them together!
 - **Stop guessing, start investigating!**
 - Scope:
+  - I want you to go away knowing that these tools exist and what kinds of 
+    information you can get from them. We won't cover setup or go in depth on any of them.
   - This is about **“Surveillance Tools”**: tools that enable you to get an exhaustive view of how a program is interacting with its world, and to some degree what paths it is going down internally. 
   - There’s a lot of overlap with **tracing tools**. But we’re going to be mostly ignoring the performance optimization aspects of tracing, and we’re also going to be looking at some tools outside the tracing space.
   - This is about the gray area between *debugging* and *understanding*. Tools and techniques that are useful for building understanding of what’s actually going on in your own code, the libraries you use, and the tools you rely on.
@@ -48,4 +50,17 @@
 - “What processes does this program start?”: `execsnoop` from BCC
 - “What methods are (or aren’t) called in my program?”: `ucalls`, `uflow`,  `bpftrace`
 - “How does this program talk to external services?”: `mitmproxy`, various BCC tools, Postman, `wireshark`.
+- "Tell me more about this binary": `readelf`, `strings`, `ldd`
 
+## Rough outline for session #1
+
+- Brief intros
+- A little about surveillance tools
+- A bit about scope
+- `lsof`
+- `docker diff`
+- `strace` for file access
+- `strace` for env var access
+- BCC tools TCP snooping, etc...
+- `mitmproxy` for HTTP connections
+- `bpftrace`, time permitting
