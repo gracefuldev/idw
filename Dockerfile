@@ -49,6 +49,13 @@ RUN apt-get install -y apt-transport-https ca-certificates curl gnupg-agent soft
 # Get the kernel headers (some BCC tools need them)
 # Note that this is not as simple as getting the headers for the container's 
 # Linux version. They need to be the headers for the Docker host kernel.
+
+# Assumes that the kernel configuration for the host
+# kernel is in a file on the host called
+# `kernelconfig` in the same directory as this
+# Dockerfile.  bin/copy-kernel-config.sh is a good way
+# to get the right config in the right place.
+COPY kernelconfig /root/kernelconfig
 COPY ./bin/install-kernel-headers.sh /root/
 RUN cd /root && sh install-kernel-headers.sh 
 

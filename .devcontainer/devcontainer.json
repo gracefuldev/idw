@@ -28,6 +28,7 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.
+	"initializeCommand": "./bin/copy-kernel-config.sh",
 	"postCreateCommand": "./bin/init.sh",
 	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "idw",
