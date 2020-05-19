@@ -3,6 +3,9 @@
 {
 	"name": "Investigative Debugging Workshop Container",
 	"dockerFile": "../Dockerfile",
+	// Experimental: disable the line above and enable the line below to 
+	// download a very large image instead of building for a very long time.
+	// "image": "avdi/idw",
 	// ************************************************************************
 	// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
 	// 
