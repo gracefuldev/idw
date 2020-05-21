@@ -50,7 +50,7 @@ RUN apt-get install -y apt-transport-https ca-certificates curl gnupg-agent soft
 # Note that this is not as simple as getting the headers for the container's 
 # Linux version. They need to be the headers for the Docker host kernel.
 COPY ./bin/install-kernel-headers.sh /root/
-RUN cd /root && sh install-kernel-headers.sh 
+RUN cd /root && bash install-kernel-headers.sh 
 
 RUN apt-get install -y man
 
