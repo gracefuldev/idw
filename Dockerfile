@@ -148,7 +148,14 @@ RUN cd ~ \
     && update-ca-certificates
 
 # for dig
-RUN apt install -y dnsutils
+RUN apt-get install -y dnsutils
+
+# for ab
+RUN apt-get install -y apache2-utils
+
+# For Node 12
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+    && apt-get install -y nodejs
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
