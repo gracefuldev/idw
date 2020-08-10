@@ -97,20 +97,6 @@ RUN apt-get install -y cmake
 RUN apt-get install -y binutils-dev
 RUN apt-get install -y clang
 
-RUN cd ~ \
-    && git clone https://github.com/iovisor/bpftrace.git \
-    && cd bpftrace \
-    && git checkout v0.11.0 \
-    && mkdir -p build \
-    && cd build \
-    && cmake -DCMAKE_BUILD_TYPE=Release ../ \
-    && make \
-    && make install
-
-# For mitmproxy demo
-RUN apt-get install -y mitmproxy
-RUN opt/rubies/ruby-${RUBY_VERSION}/bin/gem install selenium-webdriver
-
 # Compile BPF Compiler Collection (BCC) from source. 
 # The version in Debian buster is old enough that it's missing tools such as uflow
 RUN apt-add-repository non-free \
@@ -125,6 +111,20 @@ RUN apt-add-repository non-free \
     && cmake .. \
     && make \
     && make install
+    
+RUN cd ~ \
+    && git clone https://github.com/iovisor/bpftrace.git \
+    && cd bpftrace \
+    && git checkout v0.11.0 \
+    && mkdir -p build \
+    && cd build \
+    && cmake -DCMAKE_BUILD_TYPE=Release ../ \
+    && make \
+    && make install
+
+# For mitmproxy demo
+RUN apt-get install -y mitmproxy
+RUN opt/rubies/ruby-${RUBY_VERSION}/bin/gem install selenium-webdriver
 
 # Everything has to have Node these days!
 RUN apt-get install -y npm
