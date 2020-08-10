@@ -157,5 +157,8 @@ RUN apt-get install -y apache2-utils
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
     && apt-get install -y nodejs
 
+# For Java
+RUN apt-get install -y default-jdk
+
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
