@@ -99,8 +99,10 @@ RUN apt-get install -y clang
 
 RUN cd ~ \
     && git clone https://github.com/iovisor/bpftrace.git \
-    && mkdir -p bpftrace/build \
-    && cd bpftrace/build \
+    && cd bpftrace \
+    && git checkout v0.11.0 \
+    && mkdir -p build \
+    && cd build \
     && cmake -DCMAKE_BUILD_TYPE=Release ../ \
     && make \
     && make install
@@ -116,8 +118,10 @@ RUN apt-add-repository non-free \
     && apt-get update \
     && cd ~ \
     && git clone https://github.com/iovisor/bcc.git \
-    && mkdir -p bcc/build \
-    && cd bcc/build \
+    && cd bcc \
+    && git checkout v0.15.0 \
+    && mkdir -p build \
+    && cd build \
     && cmake .. \
     && make \
     && make install
