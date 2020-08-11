@@ -152,10 +152,11 @@ RUN cd ~ \
     && update-ca-certificates
 
 # for dig
-RUN apt-get install -y dnsutils
-
-# for ab
-RUN apt-get install -y apache2-utils
+RUN apt-get install -y dnsutils \
+# for ab (apache bench), it's a web performance testing tool
+    apache2-utils \ 
+# for sanity
+    vim
 
 # For Node 12
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
