@@ -165,5 +165,9 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
 # For Java
 RUN apt-get install -y default-jdk
 
+# For header files, for use with bpftrace
+# TODO: collapse this into the bpftrace section?
+RUN apt-get install -y libc6-dev-i386
+
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
