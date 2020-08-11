@@ -32,6 +32,26 @@ $ find . -name '*proc*'
 ./syscalls/sys_exit_rt_sigprocmask
 ```
 
+# What kprobes are available related to a keyword?
+
+```
+bpftrace -l kprobe:*execve*
+kprobe:__do_execve_file.isra.40
+kprobe:__ia32_compat_sys_execve
+kprobe:__ia32_compat_sys_execveat
+kprobe:__ia32_sys_execve
+kprobe:__ia32_sys_execveat
+kprobe:__x32_compat_sys_execve
+kprobe:__x64_sys_execve
+kprobe:__x64_sys_execveat
+kprobe:__x32_compat_sys_execveat
+kprobe:do_execve_file
+kprobe:do_execve
+kprobe:do_execveat
+```
+
+
+
 # Get documentation for a specific kernel syscall tracepoint
 
 ```bash
@@ -87,5 +107,13 @@ TODO: Figure out why the `pid` variable disagrees with what the target script th
 bpftrace -e 'tracepoint:syscalls:sys_enter_execve, tracepoint:syscalls:sys_enter_execveat { printf("%s: %s exec: %s\n", probe, comm, str(args->filename)); join(args->argv); }' -c 'sh ./blurp.sh'
 ```
 
+## Using kprobes:
 
+
+
+## Using uprobes:
+
+```bash
+bpftrace -e 'uprobe:/lib/x86_64-linux-gnu/libc.so.6:execve { printf("command %s executed by %s (%d)\n", str(arg0), comm, pid); }' -c 'sh ./blurp.sh'
+```
 
