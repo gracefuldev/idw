@@ -1,3 +1,5 @@
 /bundler_example/Gemfile.lock
 docker-image-id.txt
 cats.json
+/vendor
+/.vscode/settings.json
