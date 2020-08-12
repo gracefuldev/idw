@@ -1,3 +1,24 @@
+# What hostnames does this command look up?
+
+```bash
+ltrace -f -e getaddrinfo sh ./blurp.sh 
+I am blurp (1096)
+I will definitely not use the network!
+Press any key..../blurp.sh: 4: read: arg count
+[pid 1097] --- Called exec() ---
+[pid 1099] libcurl.so.4->getaddrinfo("icanhazdadjoke.com", "443", 0x55f57b9853d0, 0x7f6436c16c10) = 0
+[pid 1099] +++ exited (status 0) +++
+Is the pool safe for diving? It deep ends.[pid 1097] +++ exited (status 0) +++
+[pid 1096] --- SIGCHLD (Child exited) ---
+
+[pid 1100] --- Called exec() ---
+[pid 1100] +++ exited (status 0) +++
+[pid 1096] --- SIGCHLD (Child exited) ---
+[pid 1096] +++ exited (status 0) +++
+```
+
+Note `-f` to trace children.
+
 # Explore available predefined kernel tracepoints
 
 ```bash
