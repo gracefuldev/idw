@@ -151,27 +151,22 @@ RUN cd ~ \
     && echo "mitmproxy/mitmproxy-ca-cert.crt" >> /etc/ca-certificates.conf \
     && update-ca-certificates
 
+# For Node 12
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+    && apt-get install -y nodejs
+
 # for dig
 RUN apt-get install -y dnsutils \
 # for ab (apache bench), it's a web performance testing tool
     apache2-utils \ 
 # for sanity
-    vim
-
-# For Node 12
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
-    && apt-get install -y nodejs
-
+    vim \
+# iptables is needed for mitmproxy (move to that section)
+    iptables \
+# For header files, for use with bpftrace (move to that section)
+    libc6-dev-i386
 # For Java
-RUN apt-get install -y default-jdk
-
-# For header files, for use with bpftrace
-# TODO: collapse this into the bpftrace section?
-RUN apt-get install -y libc6-dev-i386
-
-# iptables is needed for mitmproxy
-# TODO: collapse this into the mitmproxy section
-RUN apt-get install -y iptables
+    default-jdk
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
