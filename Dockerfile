@@ -141,20 +141,6 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
 # 6. Run update-ca-certificates to tell the OS to update its caches of trusted
 #    certificates.
 
-# For mitmproxy demo
-COPY ./mitmproxy-certs /root/.mitmproxy
-RUN apt-get install -y mitmproxy \
-    && opt/rubies/ruby-${RUBY_VERSION}/bin/gem install selenium-webdriver \
-    && cd ~ \
-    && openssl x509 -in /root/.mitmproxy/mitmproxy-ca-cert.pem -inform PEM -out mitmproxy-ca-cert.crt \
-    && mkdir /usr/share/ca-certificates/mitmproxy \
-    && cp mitmproxy-ca-cert.crt /usr/share/ca-certificates/mitmproxy \
-    && echo "mitmproxy/mitmproxy-ca-cert.crt" >> /etc/ca-certificates.conf \
-    && update-ca-certificates \
-    && useradd --create-home mitmproxyuser
-# copy in the bin/mitm script
-
-
 # for dig
 RUN apt-get install -y dnsutils \
     # for ab (apache bench), it's a web performance testing tool
@@ -167,6 +153,23 @@ RUN apt-get install -y dnsutils \
     libc6-dev-i386 \
     # For Java
     default-jdk
+
+# Add a user for mitmproxy
+RUN useradd --create-home mitmproxyuser \
+    # install mitmproxy
+    && apt-get install -y mitmproxy \
+    # force mitmproxy to generate certs in ~/.mitmproxy/
+    && sudo -u mitmproxyuser -H bash -c 'mitmproxy --options' > /dev/null \
+    # make a new system dir for the mitmproxy cert
+    && mkdir /usr/share/ca-certificates/mitmproxy \
+    # convert and copy mitmproxy cert into systemwide cert store
+    && openssl x509 -in /home/mitmproxyuser/.mitmproxy/mitmproxy-ca-cert.pem -inform PEM -out /usr/share/ca-certificates/mitmproxy/mitmproxy-ca-cert.crt \
+    # tell system to trust the mitmproxy cert
+    && echo "mitmproxy/mitmproxy-ca-cert.crt" >> /etc/ca-certificates.conf \
+    # tell system to update its cache of trusted certs
+    && update-ca-certificates 
+
+COPY ./bin ~/bin
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
