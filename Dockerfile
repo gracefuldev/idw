@@ -147,8 +147,6 @@ RUN apt-get install -y dnsutils \
     apache2-utils \ 
     # for sanity
     vim \
-    # iptables is needed for mitmproxy (move to that section)
-    iptables \
     # For header files, for use with bpftrace (move to that section)
     libc6-dev-i386 \
     # For Java
@@ -158,10 +156,15 @@ RUN apt-get install -y dnsutils \
     # this is important
     cowsay
 
+##
+# Set up mitmproxy
+#
+# Trigger a transparent proxy with bin/mitmproxy-transparent.sh
+##
 # Add a user for mitmproxy
 RUN useradd --create-home mitmproxyuser \
     # install mitmproxy
-    && apt-get install -y mitmproxy \
+    && apt-get install -y mitmproxy iptables \
     # force mitmproxy to generate certs in ~/.mitmproxy/
     && sudo -u mitmproxyuser -H bash -c 'mitmproxy --options' > /dev/null \
     # make a new system dir for the mitmproxy cert
@@ -171,7 +174,7 @@ RUN useradd --create-home mitmproxyuser \
     # tell system to trust the mitmproxy cert
     && echo "mitmproxy/mitmproxy-ca-cert.crt" >> /etc/ca-certificates.conf \
     # tell system to update its cache of trusted certs
-    && update-ca-certificates 
+    && update-ca-certificates
 
 COPY ./bin ~/bin
 
