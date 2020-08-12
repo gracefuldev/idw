@@ -169,5 +169,9 @@ RUN apt-get install -y default-jdk
 # TODO: collapse this into the bpftrace section?
 RUN apt-get install -y libc6-dev-i386
 
+# iptables is needed for mitmproxy
+# TODO: collapse this into the mitmproxy section
+RUN apt-get install -y iptables
+
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
