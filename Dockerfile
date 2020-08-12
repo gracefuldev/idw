@@ -122,13 +122,10 @@ RUN cd ~ \
     && make \
     && make install
 
-# For mitmproxy demo
-RUN apt-get install -y mitmproxy
-RUN opt/rubies/ruby-${RUBY_VERSION}/bin/gem install selenium-webdriver
-
-# Everything has to have Node these days!
-RUN apt-get install -y npm
-RUN npm install --global http-server
+# For Node 12
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install --global http-server
 
 # Enable mitmproxy to proxy SSL connections
 # See https://docs.mitmproxy.org/stable/concepts-certificates/
@@ -143,19 +140,20 @@ RUN npm install --global http-server
 # 5. Add a line to /etc/ca-certificates.conf to stamp the new cert as approved
 # 6. Run update-ca-certificates to tell the OS to update its caches of trusted
 #    certificates.
+
+# For mitmproxy demo
 COPY ./mitmproxy-certs /root/.mitmproxy
-RUN cd ~ \
+RUN apt-get install -y mitmproxy \
+    && opt/rubies/ruby-${RUBY_VERSION}/bin/gem install selenium-webdriver \
+    && cd ~ \
     && openssl x509 -in /root/.mitmproxy/mitmproxy-ca-cert.pem -inform PEM -out mitmproxy-ca-cert.crt \
     && mkdir /usr/share/ca-certificates/mitmproxy \
     && cp mitmproxy-ca-cert.crt /usr/share/ca-certificates/mitmproxy \
     && echo "mitmproxy/mitmproxy-ca-cert.crt" >> /etc/ca-certificates.conf \
-    && update-ca-certificates
-RUN useradd --create-home mitmproxyuser
+    && update-ca-certificates \
+    && useradd --create-home mitmproxyuser
 # copy in the bin/mitm script
 
-# For Node 12
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
-    && apt-get install -y nodejs
 
 # for dig
 RUN apt-get install -y dnsutils \
