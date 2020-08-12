@@ -150,6 +150,8 @@ RUN cd ~ \
     && cp mitmproxy-ca-cert.crt /usr/share/ca-certificates/mitmproxy \
     && echo "mitmproxy/mitmproxy-ca-cert.crt" >> /etc/ca-certificates.conf \
     && update-ca-certificates
+RUN useradd --create-home mitmproxyuser
+# copy in the bin/mitm script
 
 # For Node 12
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
