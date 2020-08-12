@@ -11,7 +11,7 @@ ip6tables -t nat -A OUTPUT -p tcp -m owner ! --uid-owner mitmproxyuser --dport 8
 ip6tables -t nat -A OUTPUT -p tcp -m owner ! --uid-owner mitmproxyuser --dport 443 -j REDIRECT --to-port 8080
 
 # activate the proxy!
-sudo -u mitmproxyuser -H bash -c '$HOME/.local/bin/mitmproxy --mode transparent --showhost --set block_global=false'
+sudo -u mitmproxyuser -H bash -c 'mitmproxy --mode transparent --showhost --set block_global=false'
 # runs until you exit ...
 
 # cleanup
