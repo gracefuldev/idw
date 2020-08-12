@@ -111,7 +111,7 @@ RUN apt-add-repository non-free \
     && cmake .. \
     && make \
     && make install
-    
+
 RUN cd ~ \
     && git clone https://github.com/iovisor/bpftrace.git \
     && cd bpftrace \
@@ -159,15 +159,15 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
 
 # for dig
 RUN apt-get install -y dnsutils \
-# for ab (apache bench), it's a web performance testing tool
+    # for ab (apache bench), it's a web performance testing tool
     apache2-utils \ 
-# for sanity
+    # for sanity
     vim \
-# iptables is needed for mitmproxy (move to that section)
+    # iptables is needed for mitmproxy (move to that section)
     iptables \
-# For header files, for use with bpftrace (move to that section)
-    libc6-dev-i386
-# For Java
+    # For header files, for use with bpftrace (move to that section)
+    libc6-dev-i386 \
+    # For Java
     default-jdk
 
 # Switch back to dialog for any ad-hoc use of apt-get
