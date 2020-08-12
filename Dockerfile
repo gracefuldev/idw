@@ -152,7 +152,11 @@ RUN apt-get install -y dnsutils \
     # For header files, for use with bpftrace (move to that section)
     libc6-dev-i386 \
     # For Java
-    default-jdk
+    default-jdk \
+    # monitor dns: tcpdump -i eth0 udp port 53
+    tcpdump \
+    # this is important
+    cowsay
 
 # Add a user for mitmproxy
 RUN useradd --create-home mitmproxyuser \
@@ -172,4 +176,6 @@ RUN useradd --create-home mitmproxyuser \
 COPY ./bin ~/bin
 
 # Switch back to dialog for any ad-hoc use of apt-get
-ENV DEBIAN_FRONTEND=dialog
+ENV DEBIAN_FRONTEND=
+# we don't have locale support in here. This makes it not complain
+ENV LANG=C

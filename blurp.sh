@@ -1,8 +1,9 @@
 #!/bin/bash
 echo "I am blurp ($$)"
-echo "I will definitely not use the network!"
-read -p "Press any key..."
+echo "I will definitely not use the network! or write any files."
+read -p "Press enter..."
 echo "blurp" > /tmp/blurp$$.tmp
-curl -H "Accept: text/plain" https://icanhazdadjoke.com/ 
+echo "But I will tell you a joke!\n"
+curl -s -H "Accept: text/plain" https://icanhazdadjoke.com/  | /usr/games/cowsay
 echo ""
 date > ~/.lastblurp
