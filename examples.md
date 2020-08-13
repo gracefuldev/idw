@@ -118,8 +118,10 @@ Attaching 2 probes...
 /tmp/blurp23888.tmp: opened by blurp.sh (2297)
 ```
 
-TODO: Figure out why the `pid` variable disagrees with what the target script thinks is its PID. 
-Container vs host pid, probably
+## who is writing how many bytes
+```bash
+bpftrace -e 'tracepoint:syscalls:sys_enter_write { @bytes_written[comm] = sum(args->count)}'
+```
 
 ## who reads my readme
 
